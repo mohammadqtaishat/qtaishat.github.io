@@ -1,2 +1,2 @@
-# qtaishat.github.io
+# Qtaishat
 QTAISHAT WEBSITE
