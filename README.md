@@ -1,2 +1,0 @@
-# Qtaishat
-QTAISHAT WEBSITE
