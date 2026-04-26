@@ -12,9 +12,10 @@
   html, body {
     width: 100%; height: 100%;
     overflow: hidden;
-    background: #020205; /* Deep space black-blue */
+    background: #010105; /* Deeper space background */
     font-family: 'Cormorant Garamond', Georgia, serif;
     color: #fff;
+    cursor: default;
   }
   canvas { position: fixed; inset: 0; z-index: 0; display: block; }
 
@@ -22,18 +23,22 @@
     position: fixed; top: 2rem; left: 2.5rem; z-index: 20;
     font-family: 'Cormorant Garamond', serif; font-size: 0.75rem;
     font-weight: 300; letter-spacing: 0.5em; text-transform: uppercase;
-    color: rgba(255,255,255,0.5); direction: ltr;
+    color: rgba(255,255,255,0.4); direction: ltr;
   }
   #counter {
     position: fixed; top: 2rem; right: 2.5rem; z-index: 20;
     font-family: 'Cormorant Garamond', serif; font-size: 0.72rem;
-    letter-spacing: 0.25em; color: rgba(255,255,255,0.4); direction: ltr;
+    letter-spacing: 0.25em; color: rgba(255,255,255,0.3); direction: ltr;
   }
 
+  /* Text Card */
   #card {
     position: fixed; bottom: 12vh; left: 50%; transform: translateX(-50%);
     z-index: 10; width: min(700px, 90vw);
     text-align: center; cursor: pointer;
+    background: radial-gradient(circle, rgba(20, 10, 40, 0.4) 0%, rgba(0,0,0,0) 70%); /* Subtle central glow */
+    border-radius: 20px;
+    padding: 2rem;
   }
 
   #text-wrap { position: relative; min-height: 220px; display: flex; align-items: center; justify-content: center; }
@@ -51,7 +56,7 @@
   .arabic {
     font-family: 'Amiri', serif; font-size: clamp(2.2rem, 6vw, 3.8rem);
     font-weight: 700; line-height: 1.6; color: #fff;
-    text-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 40px rgba(160,100,255,0.3);
+    text-shadow: 0 0 25px rgba(255,255,255,0.5), 0 0 50px rgba(180,150,255,0.4);
   }
   .divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, #fff, transparent); margin: 0.8rem auto; opacity: 0.3; }
   .transliteration { font-size: 1.1rem; font-style: italic; color: #dcdcfe; letter-spacing: 0.05em; }
@@ -88,7 +93,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AZKAR DATA
+// AZKAR DATA (Preserved from original)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const AZKAR = [
   { arabic: "سُبْحَانَ اللهِ", transliteration: "Subhan Allah", english: "Glory be to God", source: "Sahih al-Bukhari" },
@@ -100,7 +105,7 @@ const AZKAR = [
 ];
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// THREE.JS — ENHANCED COSMIC JOURNEY
+// THREE.JS — COLORFUL SPACE JOURNEY
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -111,54 +116,82 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1500);
 camera.position.z = 5;
 
-// Function to generate a glowing soft-circle texture
-function createCircleTexture(color, size = 128) {
+// Function to generate colorful glowing particle textures
+function createColorfulCircleTexture(color1, color2, size = 128) {
     const matCanvas = document.createElement('canvas');
     matCanvas.width = size; matCanvas.height = size;
     const ctx = matCanvas.getContext('2d');
     const center = size / 2;
     const gradient = ctx.createRadialGradient(center, center, 0, center, center, center);
-    gradient.addColorStop(0, color);
-    gradient.addColorStop(0.2, color);
-    gradient.addColorStop(0.5, 'rgba(100, 50, 255, 0.2)');
+    gradient.addColorStop(0, color1);
+    gradient.addColorStop(0.3, color2);
+    gradient.addColorStop(0.6, 'rgba(0, 0, 0, 0.1)'); // Very soft edge
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, size, size);
-    const texture = new THREE.CanvasTexture(matCanvas);
-    return texture;
+    return new THREE.CanvasTexture(matCanvas);
 }
 
 // 1. STAR LAYER (The "Fly-Through" Points)
-const starCount = 5000;
+const starCount = 6000;
 const starGeo = new THREE.BufferGeometry();
 const starPos = new Float32Array(starCount * 3);
+const starColors = new Float32Array(starCount * 3);
+
+// Star color palette (blues, purples, whites)
+const starPalette = [
+    new THREE.Color(0xffffff), // White
+    new THREE.Color(0xccccff), // Light Blue
+    new THREE.Color(0xe0bbff)  // Light Purple
+];
+
 for (let i = 0; i < starCount; i++) {
-    starPos[i*3] = (Math.random() - 0.5) * 1000;
-    starPos[i*3+1] = (Math.random() - 0.5) * 1000;
-    starPos[i*3+2] = Math.random() * 1000;
+    // 3D position
+    starPos[i*3] = (Math.random() - 0.5) * 1200; // X
+    starPos[i*3+1] = (Math.random() - 0.5) * 1200; // Y
+    starPos[i*3+2] = Math.random() * 1200; // Z
+
+    // Choose a color
+    const c = starPalette[Math.floor(Math.random() * starPalette.length)];
+    starColors[i*3] = c.r;
+    starColors[i*3+1] = c.g;
+    starColors[i*3+2] = c.b;
 }
+
 starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+starGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+
 const starMat = new THREE.PointsMaterial({
-    size: 2, sizeAttenuation: true, transparent: true, opacity: 0.9,
-    map: createCircleTexture('rgba(255, 255, 255, 1)'), blending: THREE.AdditiveBlending
+    size: 2.2, sizeAttenuation: true, transparent: true, opacity: 1,
+    vertexColors: true, // Use generated colors
+    map: createColorfulCircleTexture('rgba(255, 255, 255, 1)', 'rgba(200, 200, 255, 0.5)'), 
+    blending: THREE.AdditiveBlending
 });
 const stars = new THREE.Points(starGeo, starMat);
 scene.add(stars);
 
-// 2. NEBULA CLOUDS (Large glowing "blobs" of color)
-const nebulaCount = 40;
+// 2. COLORFUL NEBULA CLOUDS (Gaseous gaseous blobs)
 const nebulaGroup = new THREE.Group();
-const nebulaColors = ['#442288', '#2244aa', '#662266', '#110033'];
+scene.add(nebulaGroup);
+const nebulaCount = 60; // More nebulae for more color
+const nebulaColors = [
+    ['#3a1a6b', '#221155'], // Deep Purple
+    ['#1a4b8c', '#112255'], // Deep Blue
+    ['#5a2b8c', '#330055'], // Magenta/Violet
+    ['#8c6b3a', '#554422']  // Faint Gold/Rust
+];
 
 for (let i = 0; i < nebulaCount; i++) {
-    const tex = createCircleTexture(nebulaColors[i % nebulaColors.length], 256);
-    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending });
+    const palette = nebulaColors[i % nebulaColors.length];
+    const tex = createColorfulCircleTexture(palette[0], palette[1], 256);
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending });
     const sprite = new THREE.Sprite(mat);
-    sprite.position.set((Math.random()-0.5)*800, (Math.random()-0.5)*800, Math.random()*1000);
-    sprite.scale.set(300, 300, 1);
+    
+    // Distribute further and deeper
+    sprite.position.set((Math.random()-0.5)*1400, (Math.random()-0.5)*1400, Math.random()*1200);
+    sprite.scale.set(400, 400, 1);
     nebulaGroup.add(sprite);
 }
-scene.add(nebulaGroup);
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // AZKAR LOGIC
@@ -207,20 +240,33 @@ function animate() {
     requestAnimationFrame(animate);
     const now = Date.now();
 
-    // Star Fly-through movement
+    // 1. Star Fly-through movement (Toward camera)
     const starArr = stars.geometry.attributes.position.array;
     for (let i = 0; i < starCount; i++) {
-        starArr[i*3 + 2] -= 0.8; // Speed
-        if (starArr[i*3 + 2] < 0) starArr[i*3 + 2] = 1000;
+        starArr[i*3 + 2] -= 1.0; // Speed (Forward movement)
+        if (starArr[i*3 + 2] < 0) {
+            // Respawn at back
+            starArr[i*3 + 2] = 1200;
+            starArr[i*3] = (Math.random() - 0.5) * 1200;
+            starArr[i*3+1] = (Math.random() - 0.5) * 1200;
+        }
     }
     stars.geometry.attributes.position.needsUpdate = true;
 
-    // Nebula Cloud movement
-    nebulaGroup.children.forEach(cloud => {
-        cloud.position.z -= 0.3; // Slower clouds for depth
-        if (cloud.position.z < -200) cloud.position.z = 1000;
+    // 2. Colorful Nebula movement (Deeper journey)
+    nebulaGroup.children.forEach((cloud, index) => {
+        cloud.position.z -= 0.5; // Slower forward movement for deep nebulae
+        if (cloud.position.z < -200) cloud.position.z = 1200;
+        
+        // Very subtle drift rotation
+        cloud.material.rotation += (index % 2 === 0 ? 0.0001 : -0.0001);
     });
 
+    // Subtlest drift to entire group for depth
+    nebulaGroup.rotation.z += 0.0001;
+    stars.rotation.z += 0.0001;
+
+    // 3. Progress Bar Logic
     if (!paused) {
         const elapsed = now - startTime;
         const p = Math.max(0, 1 - (elapsed / DURATION));
