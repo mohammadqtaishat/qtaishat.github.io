@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>أذكار — Qtaishat</title>
+<meta name="description" content="A cosmic journey through Islamic remembrance — أذكار">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
@@ -15,95 +16,148 @@
     background: #010105;
     font-family: 'Cormorant Garamond', Georgia, serif;
     color: #fff;
+    cursor: default;
   }
   canvas { position: fixed; inset: 0; z-index: 0; display: block; }
 
-  /* Top Navigation */
   #site-name {
     position: fixed; top: 2rem; left: 2.5rem; z-index: 20;
-    font-size: 0.75rem; font-weight: 300; letter-spacing: 0.4em; 
-    text-transform: uppercase; color: rgba(255,255,255,0.2); direction: ltr;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.75rem;
+    font-weight: 300; letter-spacing: 0.5em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); direction: ltr;
   }
   #counter {
     position: fixed; top: 2rem; right: 2.5rem; z-index: 20;
-    font-size: 0.72rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.18); direction: ltr;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem;
+    letter-spacing: 0.25em; color: rgba(255,255,255,0.2); direction: ltr;
   }
 
-  /* Centered Branding at Bottom */
-  #branding-footer {
-    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    z-index: 20; display: flex; align-items: center; gap: 1rem;
-    font-size: 1.1rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.4);
-    font-weight: 300; pointer-events: none;
-  }
-  #branding-footer span { font-family: 'Amiri', serif; }
-
-  /* Main Card Logic */
   #card {
-    position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 10; width: min(700px, 90vw); text-align: center;
+    position: fixed; bottom: 10vh; left: 50%; transform: translateX(-50%);
+    z-index: 10; width: min(700px, 90vw);
+    pointer-events: auto; cursor: pointer; user-select: none; text-align: center;
   }
 
-  #text-wrap { position: relative; min-height: 200px; display: flex; align-items: center; justify-content: center; }
+  #text-wrap {
+    position: relative; min-height: 180px;
+    display: flex; align-items: center; justify-content: center;
+  }
 
   .azkar-slide {
-    position: absolute; inset: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 1rem;
-    transition: opacity 1.2s ease, transform 1.2s ease; opacity: 0; transform: translateY(15px);
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 0.8rem;
+    transition: opacity 1.2s ease, transform 1.2s ease;
+    opacity: 0; transform: translateY(20px); pointer-events: none;
   }
-  .azkar-slide.active { opacity: 1; transform: translateY(0); position: relative; }
+  .azkar-slide.active {
+    opacity: 1; transform: translateY(0);
+    pointer-events: auto; position: relative;
+  }
+  .azkar-slide.exit { opacity: 0; transform: translateY(-20px); }
 
   .arabic {
-    font-family: 'Amiri', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700;
-    text-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 40px rgba(100,80,255,0.3);
+    direction: rtl; text-align: center;
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+    font-weight: 700; line-height: 1.6; color: #fff;
+    text-shadow: 
+      0 0 10px rgba(255,255,255,0.8),
+      0 0 30px rgba(180,160,255,0.5),
+      0 5px 15px rgba(0,0,0,0.9);
   }
-  .transliteration { font-style: italic; color: rgba(200,210,255,0.7); font-size: 0.95rem; }
-  .english { font-size: 1.1rem; color: rgba(255,255,255,0.85); max-width: 80%; }
-
-  /* Progress Bar */
-  #progress-container {
-    position: fixed; bottom: 6rem; left: 50%; transform: translateX(-50%);
-    width: 200px; height: 1px; background: rgba(255,255,255,0.1); z-index: 20;
+  .divider {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    margin: 0.5rem auto;
   }
-  #progress-bar { height: 100%; width: 100%; background: #fff; transform-origin: left; transition: transform 0.1s linear; }
+  .transliteration {
+    direction: ltr; font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-style: italic;
+    color: rgba(210,210,255,0.8); letter-spacing: 0.05em;
+  }
+  .english {
+    direction: ltr; font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem; font-weight: 300; color: rgba(255,255,255,0.9);
+    letter-spacing: 0.02em; line-height: 1.6;
+    max-width: 85%; margin: 0 auto;
+  }
+  .source {
+    direction: ltr; font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.25); margin-top: 1rem;
+  }
 
+  #card-footer {
+    display: flex; align-items: center; gap: 1.5rem;
+    margin-top: 2.5rem; padding: 0 1rem;
+  }
+  #progress-wrap {
+    flex: 1; height: 1px;
+    background: rgba(255,255,255,0.1); position: relative;
+    overflow: hidden;
+  }
+  #progress-bar {
+    height: 100%; width: 100%; transform-origin: right;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+  }
+  #pause-btn {
+    background: none; border: none; cursor: pointer;
+    color: rgba(255,255,255,0.3); transition: color 0.3s;
+  }
+  #pause-btn:hover { color: #fff; }
+
+  #paused-pill {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); z-index: 5;
+    font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase;
+    color: rgba(255,255,255,0.2); opacity: 0; transition: opacity 0.5s;
+    pointer-events: none;
+  }
   #hint {
-    position: fixed; bottom: 4.5rem; left: 50%; transform: translateX(-50%);
-    font-size: 0.5rem; letter-spacing: 0.3em; color: rgba(255,255,255,0.15); text-transform: uppercase;
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.15); pointer-events: none;
   }
 </style>
 </head>
 <body>
 
-<div id="site-name">Besm Allah</div>
+<div id="site-name">Qtaishat</div>
 <div id="counter"></div>
 <canvas id="c"></canvas>
 
 <div id="card">
   <div id="text-wrap"></div>
+  <div id="card-footer">
+    <div id="progress-wrap"><div id="progress-bar"></div></div>
+    <button id="pause-btn" title="Pause / Play" onclick="event.stopPropagation()">
+      <svg id="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="6" y="4" width="3" height="16" /><rect x="15" y="4" width="3" height="16" />
+      </svg>
+      <svg id="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </button>
+  </div>
 </div>
 
-<div id="progress-container"><div id="progress-bar"></div></div>
-
-<div id="branding-footer">
-    <span>قطيشات</span>
-    <div style="width: 1px; height: 15px; background: rgba(255,255,255,0.2);"></div>
-    <div>Qtaishat</div>
-</div>
-
+<div id="paused-pill">Paused</div>
 <div id="hint">tap to advance · p to pause</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AZKAR DATA
+// AZKAR DATA (Preserved from original)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const AZKAR = [
-  { arabic: "سُبْحَانَ اللهِ", transliteration: "Subhan Allah", english: "Glory be to God" },
-  { arabic: "الْحَمْدُ لِلَّهِ", transliteration: "Alhamdulillah", english: "All praise is due to God" },
-  { arabic: "اللهُ أَكْبَرُ", transliteration: "Allahu Akbar", english: "God is the Greatest" },
-  { arabic: "لَا إِلَهَ إِلَّا اللهُ", transliteration: "La ilaha illallah", english: "There is no god but God" },
-  { arabic: "بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ", transliteration: "Bismillah ir-Rahman ir-Rahim", english: "In the name of God, the Most Gracious, the Most Merciful" }
+  { arabic: "سُبْحَانَ اللهِ", transliteration: "Subhan Allah", english: "Glory be to God", source: "Sahih al-Bukhari" },
+  { arabic: "الْحَمْدُ لِلَّهِ", transliteration: "Alhamdulillah", english: "All praise is due to God", source: "Quran 1:2" },
+  { arabic: "اللهُ أَكْبَرُ", transliteration: "Allahu Akbar", english: "God is the Greatest", source: "Sahih al-Bukhari" },
+  { arabic: "لَا إِلَهَ إِلَّا اللهُ", transliteration: "La ilaha illallah", english: "There is no god but God", source: "Sahih Muslim" },
+  { arabic: "أَسْتَغْفِرُ اللهَ", transliteration: "Astaghfirullah", english: "I seek forgiveness from God", source: "Sahih al-Bukhari" },
+  { arabic: "بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ", transliteration: "Bismillah ir-Rahman ir-Rahim", english: "In the name of God, the Most Gracious, the Most Merciful", source: "Quran 1:1" }
 ];
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -112,21 +166,27 @@ const AZKAR = [
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
-const camera = new THREE.Camera(); // Orthographic for full-screen shader
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
 const nebulaMat = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
     uRes: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
   },
-  vertexShader: `void main() { gl_Position = vec4(position, 1.0); }`,
+  vertexShader: `
+    varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
+  `,
   fragmentShader: `
     precision highp float;
     uniform float uTime;
     uniform vec2 uRes;
+    varying vec2 vUv;
 
+    // --- Noise Utilities ---
     float hash(vec2 p) {
         p = fract(p * vec2(123.34, 456.21));
         p += dot(p, p + 45.32);
@@ -134,46 +194,55 @@ const nebulaMat = new THREE.ShaderMaterial({
     }
 
     float noise(vec2 p) {
-        vec2 i = floor(p); vec2 f = fract(p);
-        f = f*f*(3.0-2.0*f);
-        return mix(mix(hash(i), hash(i+vec2(1,0)), f.x),
-                   mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y);
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+                   mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
     }
 
     float fbm(vec2 p) {
-        float v = 0.0, a = 0.5;
-        for(int i=0; i<6; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
+        float v = 0.0;
+        float a = 0.5;
+        for (int i = 0; i < 6; i++) {
+            v += a * noise(p);
+            p *= 2.0;
+            a *= 0.5;
+        }
         return v;
     }
 
     void main() {
-        vec2 uv = (gl_FragCoord.xy - 0.5 * uRes.xy) / min(uRes.y, uRes.x);
-        float t = uTime * 0.015;
+        vec2 uv = (vUv - 0.5) * (uRes / min(uRes.x, uRes.y));
+        float t = uTime * 0.05;
 
-        // Rotation
-        float s = sin(t), c = cos(t);
+        // Slow Rotation
+        float s = sin(t * 0.2), c = cos(t * 0.2);
         uv *= mat2(c, -s, s, c);
 
-        float r = length(uv);
-        float angle = atan(uv.y, uv.x);
-
-        // Spiral Arms with realistic "Dust Lane" gaps
-        float spiral = sin(angle * 2.0 - r * 6.0 + fbm(uv * 3.0) * 2.0);
-        float nebula = fbm(uv * 2.0 + fbm(uv * 4.0 + t));
+        // Domain Warping for Nebula Texture
+        vec2 n = vec2(fbm(uv + vec2(0, t)), fbm(uv + vec2(t, 0)));
+        float clouds = fbm(uv * 2.0 + n * 1.5);
         
-        // Colors: Milky Way Palette (Deep Blue, Violet, Golden Core)
-        vec3 coreCol = vec3(1.0, 0.8, 0.6) * smoothstep(0.4, 0.0, r); // Golden center
-        vec3 armCol = vec3(0.2, 0.1, 0.5) * spiral; // Purple arms
-        vec3 dustCol = vec3(0.05, 0.02, 0.1) * nebula; // Dark space dust
-
-        // Combine
-        vec3 finalCol = coreCol + armCol * nebula + dustCol;
+        // Colors: Deep Blue, Violet, and Gold Core
+        vec3 deepBlue = vec3(0.01, 0.02, 0.1);
+        vec3 violet = vec3(0.15, 0.05, 0.25);
+        vec3 gold = vec3(0.4, 0.3, 0.2);
         
-        // Add Star Grains
-        float stars = pow(hash(uv + t*0.00001), 500.0) * 2.0;
-        finalCol += stars * smoothstep(0.8, 0.2, r);
+        float dist = length(uv);
+        float core = smoothstep(0.8, 0.0, dist);
+        
+        vec3 color = mix(deepBlue, violet, clouds);
+        color = mix(color, gold, pow(core, 3.0) * clouds);
+        
+        // Center Glow
+        color += (0.1 / (dist + 0.15)) * vec3(0.6, 0.5, 0.8);
 
-        gl_FragColor = vec4(finalCol, 1.0);
+        // Star Layer
+        float stars = pow(hash(vUv + floor(uTime * 0.001)), 500.0);
+        color += stars * step(0.9, hash(vUv * 50.0));
+
+        gl_FragColor = vec4(color, 1.0);
     }
   `
 });
@@ -182,41 +251,68 @@ const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), nebulaMat);
 scene.add(quad);
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// NAVIGATION & UI LOGIC
+// AZKAR LOGIC
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const DURATION = 10000;
-let currentIdx = 0;
-let startTime = Date.now();
-let paused = false;
+let currentIdx = 0, startTime = Date.now(), paused = false, pausedAt = 0, currentEl = null;
 
 function showAzkar(idx) {
-  const wrap = document.getElementById('text-wrap');
-  wrap.innerHTML = '';
   const z = AZKAR[idx];
-  const slide = document.createElement('div');
-  slide.className = 'azkar-slide active';
-  slide.innerHTML = `
+  const old = currentEl;
+  if (old) { 
+    old.classList.remove('active'); 
+    old.classList.add('exit'); 
+    setTimeout(() => old.remove(), 1200); 
+  }
+  
+  const el = document.createElement('div');
+  el.className = 'azkar-slide';
+  el.innerHTML = `
     <div class="arabic">${z.arabic}</div>
+    <div class="divider"></div>
     <div class="transliteration">${z.transliteration}</div>
     <div class="english">${z.english}</div>
+    <div class="source">${z.source}</div>
   `;
-  wrap.appendChild(slide);
+  document.getElementById('text-wrap').appendChild(el);
+  setTimeout(() => el.classList.add('active'), 50);
+  currentEl = el;
   document.getElementById('counter').textContent = `${idx + 1} / ${AZKAR.length}`;
 }
 
-function next() {
+function advance() {
   currentIdx = (currentIdx + 1) % AZKAR.length;
   startTime = Date.now();
   showAzkar(currentIdx);
 }
 
-window.addEventListener('click', () => { if(!paused) next(); });
-window.addEventListener('keydown', (e) => {
-  if(e.code === 'Space') next();
-  if(e.code === 'KeyP') paused = !paused;
+function togglePause() {
+  paused = !paused;
+  const pill = document.getElementById('paused-pill');
+  if (paused) {
+    pausedAt = Date.now() - startTime;
+    document.getElementById('icon-pause').style.display = 'none';
+    document.getElementById('icon-play').style.display = 'block';
+    pill.style.opacity = '1';
+  } else {
+    startTime = Date.now() - pausedAt;
+    document.getElementById('icon-pause').style.display = 'block';
+    document.getElementById('icon-play').style.display = 'none';
+    pill.style.opacity = '0';
+  }
+}
+
+// Controls
+document.getElementById('card').addEventListener('click', () => { if(!paused) advance(); });
+document.getElementById('pause-btn').addEventListener('click', (e) => { e.stopPropagation(); togglePause(); });
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') advance();
+  if (e.code === 'KeyP') togglePause();
 });
 
-// Render Loop
+// Init
+showAzkar(0);
+
 function animate() {
   requestAnimationFrame(animate);
   const now = Date.now();
@@ -224,22 +320,19 @@ function animate() {
 
   if (!paused) {
     const elapsed = now - startTime;
-    const progress = Math.min(elapsed / DURATION, 1);
-    document.getElementById('progress-bar').style.transform = `scaleX(${1 - progress})`;
-    if (progress >= 1) next();
+    const p = Math.max(0, 1 - (elapsed / DURATION));
+    document.getElementById('progress-bar').style.transform = `scaleX(${p})`;
+    if (elapsed >= DURATION) advance();
   }
-
   renderer.render(scene, camera);
 }
-
-// Init
-showAzkar(0);
-animate();
 
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   nebulaMat.uniforms.uRes.value.set(window.innerWidth, window.innerHeight);
 });
+
+animate();
 </script>
 </body>
 </html>
