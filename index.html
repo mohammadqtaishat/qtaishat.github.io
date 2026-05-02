@@ -10,8 +10,8 @@
     --bg: #010103;
     --indigo: #818cf8;
     --white: #ffffff;
-    --glass-bg: rgba(255,255,255,0.015);
-    --glass-border: rgba(255,255,255,0.08);
+    --glass-bg: rgba(255,255,255,0.001);
+    --glass-border: rgba(255,255,255,0.02);
   }
   html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); font-family:'Cormorant Garamond',Georgia,serif; color:#fff; }
   #nebula-canvas { position:fixed; inset:0; z-index:0; display:block; }
@@ -164,7 +164,7 @@ function drawNebula(t) {
 }
 
 /* ── STARS: warp fly-through ── */
-const STAR_COUNT = 700;
+const STAR_COUNT = 2000;
 const stars = [];
 function makeStars() {
   stars.length = 0;
