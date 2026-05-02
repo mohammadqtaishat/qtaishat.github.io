@@ -4,111 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>أذكار | Qtaishat.com</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --bg: #010103;
     --indigo: #818cf8;
     --white: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.015);
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(255,255,255,0.015);
+    --glass-border: rgba(255,255,255,0.08);
   }
-
-  html, body {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background: var(--bg);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    color: var(--white);
-  }
-
-  canvas { position: fixed; inset: 0; z-index: 0; display: block; }
-
-  #site-name {
-    position: fixed; top: 2rem; left: 2.5rem; z-index: 20;
-    font-family: 'Cormorant Garamond', serif; font-size: 0.8rem;
-    font-weight: 300; letter-spacing: 0.35em; text-transform: uppercase;
-    color: rgba(255,255,255,0.4); direction: ltr;
-  }
-
-  #counter {
-    position: fixed; top: 2rem; right: 2.5rem; z-index: 20;
-    font-family: 'Cormorant Garamond', serif; font-size: 0.75rem;
-    letter-spacing: 0.2em; color: rgba(255,255,255,0.3); direction: ltr;
-  }
-
-  #card {
-    position: fixed; bottom: 8vh; left: 50%; transform: translateX(-50%);
-    z-index: 10; width: min(680px, 92vw);
-    cursor: pointer;
-  }
-
-  #card-inner {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
-    padding: 2.5rem 2.5rem 1.8rem;
-    backdrop-filter: blur(20px) saturate(1.8);
-    -webkit-backdrop-filter: blur(30px) saturate(1.8);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    transition: all 0.4s ease;
-    position: relative;
-  }
-
-  #card:hover #card-inner { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.03); }
-
-  #text-wrap { position: relative; min-height: 160px; }
-
-  .azkar-slide {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; gap: 0.8rem;
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    opacity: 0; transform: translateY(15px); pointer-events: none;
-  }
-  .azkar-slide.active { opacity: 1; transform: translateY(0); pointer-events: auto; position: relative; }
-  .azkar-slide.exit { opacity: 0; transform: translateY(-15px); }
-
-  .arabic {
-    direction: rtl; font-family: 'Amiri', serif;
-    font-size: clamp(1.9rem, 4.8vw, 3.1rem);
-    font-weight: 700; line-height: 1.55; color: #fff;
-    text-shadow: 0 0 30px rgba(129, 140, 248, 0.4), 0 4px 10px rgba(0,0,0,0.9);
-  }
-
-  .transliteration { font-size: 0.95rem; font-style: italic; color: rgba(255,255,255,0.5); margin-top: 2px; }
-  .english { font-size: 1.1rem; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.6; }
-  .source { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-top: 0.5rem; }
-
-  #card-footer { display: flex; align-items: center; gap: 1.2rem; margin-top: 1.8rem; }
-  #progress-wrap { flex: 1; height: 1.5px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-  #progress-bar { height: 100%; width: 100%; background: #fff; transform-origin: right; }
-  #pause-btn { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.3); transition: color 0.3s; }
-  #pause-btn:hover { color: #fff; }
-
-  #paused-pill {
-    position: absolute; top: 1.2rem; right: 1.2rem;
-    background: rgba(129, 140, 248, 0.2); border: 1px solid rgba(129, 140, 248, 0.4);
-    border-radius: 20px; padding: 3px 12px; font-size: 0.6rem; letter-spacing: 0.2em;
-    text-transform: uppercase; color: #fff; opacity: 0; transition: opacity 0.3s;
-  }
-
-  #hint {
-    position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-    font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(255,255,255,0.15); font-family: 'Cormorant Garamond', serif;
-  }
+  html, body { width:100%; height:100%; overflow:hidden; background:var(--bg); font-family:'Cormorant Garamond',Georgia,serif; color:#fff; }
+  #nebula-canvas { position:fixed; inset:0; z-index:0; display:block; }
+  #star-canvas   { position:fixed; inset:0; z-index:1; display:block; }
+  #site-name { position:fixed; top:2rem; left:2.5rem; z-index:20; font-family:'Cormorant Garamond',serif; font-size:0.8rem; font-weight:300; letter-spacing:.35em; text-transform:uppercase; color:rgba(255,255,255,.4); direction:ltr; }
+  #counter { position:fixed; top:2rem; right:2.5rem; z-index:20; font-family:'Cormorant Garamond',serif; font-size:.75rem; letter-spacing:.2em; color:rgba(255,255,255,.3); direction:ltr; }
+  #card { position:fixed; bottom:8vh; left:50%; transform:translateX(-50%); z-index:10; width:min(680px,92vw); cursor:pointer; }
+  #card-inner { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:24px; padding:2.5rem 2.5rem 1.8rem; backdrop-filter:blur(20px) saturate(1.8); -webkit-backdrop-filter:blur(30px) saturate(1.8); box-shadow:0 10px 40px rgba(0,0,0,.5); transition:all .4s ease; position:relative; }
+  #card:hover #card-inner { border-color:rgba(255,255,255,.2); background:rgba(255,255,255,.03); }
+  #text-wrap { position:relative; min-height:160px; }
+  .azkar-slide { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; gap:.8rem; transition:opacity .8s ease,transform .8s ease; opacity:0; transform:translateY(15px); pointer-events:none; }
+  .azkar-slide.active { opacity:1; transform:translateY(0); pointer-events:auto; position:relative; }
+  .azkar-slide.exit { opacity:0; transform:translateY(-15px); }
+  .arabic { direction:rtl; font-family:'Amiri',serif; font-size:clamp(1.9rem,4.8vw,3.1rem); font-weight:700; line-height:1.55; color:#fff; text-shadow:0 0 30px rgba(129,140,248,.4),0 4px 10px rgba(0,0,0,.9); }
+  .transliteration { font-size:.95rem; font-style:italic; color:rgba(255,255,255,.5); margin-top:2px; }
+  .english { font-size:1.1rem; font-weight:300; color:rgba(255,255,255,.85); line-height:1.6; }
+  .source { font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.2); margin-top:.5rem; }
+  #card-footer { display:flex; align-items:center; gap:1.2rem; margin-top:1.8rem; }
+  #progress-wrap { flex:1; height:1.5px; background:rgba(255,255,255,.1); border-radius:2px; overflow:hidden; }
+  #progress-bar { height:100%; width:100%; background:#fff; transform-origin:right; }
+  #pause-btn { background:none; border:none; cursor:pointer; color:rgba(255,255,255,.3); transition:color .3s; }
+  #pause-btn:hover { color:#fff; }
+  #paused-pill { position:absolute; top:1.2rem; right:1.2rem; background:rgba(129,140,248,.2); border:1px solid rgba(129,140,248,.4); border-radius:20px; padding:3px 12px; font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:#fff; opacity:0; transition:opacity .3s; }
+  #hint { position:fixed; bottom:2.5rem; left:50%; transform:translateX(-50%); font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.15); font-family:'Cormorant Garamond',serif; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div id="site-name">Qtaishat.com</div>
 <div id="counter"></div>
-<canvas id="c"></canvas>
+
+<canvas id="nebula-canvas"></canvas>
+<canvas id="star-canvas"></canvas>
 
 <div id="card">
   <div id="card-inner">
@@ -118,7 +56,7 @@
       <div id="progress-wrap"><div id="progress-bar"></div></div>
       <button id="pause-btn" title="Pause / Play" onclick="event.stopPropagation()">
         <svg id="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="3" height="16"/><rect x="15" y="4" width="3" height="16"/></svg>
-        <svg id="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="icon-play"  width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M8 5v14l11-7z"/></svg>
       </button>
     </div>
   </div>
@@ -126,233 +64,213 @@
 
 <div id="hint">tap card · space to advance · p to pause</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AZKAR DATA (Preserved)
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const AZKAR = [
-  { arabic: "سُبْحَانَ اللهِ", transliteration: "Subhan Allah", english: "Glory be to God", source: "Sahih al-Bukhari" },
-  { arabic: "الْحَمْدُ لِلَّهِ", transliteration: "Alhamdulillah", english: "All praise is due to God", source: "Quran 1:2" },
-  { arabic: "اللهُ أَكْبَرُ", transliteration: "Allahu Akbar", english: "God is the Greatest", source: "Sahih al-Bukhari" },
-  { arabic: "لَا إِلَهَ إِلَّا اللهُ", transliteration: "La ilaha illallah", english: "There is no god but God", source: "Sahih Muslim" },
-  { arabic: "أَسْتَغْفِرُ اللهَ", transliteration: "Astaghfirullah", english: "I seek forgiveness from God", source: "Sahih al-Bukhari" },
-  { arabic: "بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ", transliteration: "Bismillah ir-Rahman ir-Rahim", english: "In the name of God, the Most Gracious, the Most Merciful", source: "Quran 1:1" },
-  { arabic: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ", transliteration: "La hawla wa la quwwata illa billah", english: "There is no power nor strength except through God", source: "Sahih al-Bukhari" },
-  { arabic: "سُبْحَانَ اللهِ وَبِحَمْدِهِ", transliteration: "Subhan Allahi wa bihamdihi", english: "Glory be to God and all praise is due to Him", source: "Sahih Muslim" },
-  { arabic: "سُبْحَانَ اللهِ الْعَظِيمِ", transliteration: "Subhan Allahil Azim", english: "Glory be to God, the Most Great", source: "Sahih al-Bukhari" },
-  { arabic: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ", transliteration: "Allahumma salli 'ala Muhammad", english: "O God, send blessings upon Muhammad", source: "Sahih Muslim" },
-  { arabic: "رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ", transliteration: "Rabbi-ghfir li wa tub 'alayy", english: "My Lord, forgive me and accept my repentance", source: "Sunan Abu Dawud" },
-  { arabic: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ", transliteration: "Allahumma a'inni 'ala dhikrika wa shukrika wa husni 'ibadatik", english: "O God, help me in remembering You, in thanking You, and in worshipping You in the best manner", source: "Sunan Abu Dawud" },
-  { arabic: "حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ", transliteration: "Hasbiyallahu la ilaha illa huwa 'alayhi tawakkaltu", english: "God is sufficient for me; there is no god but Him. Upon Him I rely", source: "Quran 9:129" },
-  { arabic: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", transliteration: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar", english: "Our Lord, grant us good in this life and in the hereafter, and protect us from the Fire", source: "Quran 2:201" },
-  { arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ", transliteration: "Allahumma inni a'udhu bika minal-hammi wal-hazani", english: "O God, I seek refuge in You from worry and grief", source: "Sahih al-Bukhari" },
-  { arabic: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ", transliteration: "Ya Hayyu Ya Qayyum, birahmatika astaghith", english: "O Ever-Living, O Sustainer of all, by Your mercy I call for help", source: "Sunan al-Tirmidhi" },
-  { arabic: "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا", transliteration: "Allahumma barik lana fima razaqtana", english: "O God, bless us in what You have provided us", source: "Sunan Abu Dawud" },
-  { arabic: "رَبِّ زِدْنِي عِلْمًا", transliteration: "Rabbi zidni 'ilma", english: "My Lord, increase me in knowledge", source: "Quran 20:114" },
-  { arabic: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ", transliteration: "Allahumma anta-ssalam wa minkas-salam", english: "O God, You are Peace and from You comes peace", source: "Sahih Muslim" },
-  { arabic: "إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ", transliteration: "Inna lillahi wa inna ilayhi raji'un", english: "Indeed we belong to God, and indeed to Him we shall return", source: "Quran 2:156" },
-  { arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ", transliteration: "Allahumma inni as'alukal-jannata wa a'udhu bika minan-nar", english: "O God, I ask You for Paradise and seek refuge in You from the Fire", source: "Sunan Abu Dawud" },
-  { arabic: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ", transliteration: "Subhanakallahumma wa bihamdika, ash-hadu alla ilaha illa ant", english: "Glory be to You O God, and all praise. I bear witness there is no god but You", source: "Sunan al-Tirmidhi" },
-  { arabic: "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ", transliteration: "Allahumma-kfini bihalaalika 'an haraamik", english: "O God, make what is lawful sufficient for me so I need not what is unlawful", source: "Sunan al-Tirmidhi" },
-  { arabic: "أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ", transliteration: "A'udhu billahi minash-shaytanir-rajim", english: "I seek refuge in God from the accursed Satan", source: "Quran 16:98" },
-  { arabic: "اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي", transliteration: "Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni", english: "O God, You are Forgiving and love forgiveness, so forgive me", source: "Sunan Ibn Majah" },
-  { arabic: "رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا", transliteration: "Rabbana la tu'akhidhna in nasina aw akhta'na", english: "Our Lord, do not take us to task if we forget or make a mistake", source: "Quran 2:286" },
-  { arabic: "تَوَكَّلْتُ عَلَى اللهِ", transliteration: "Tawakkaltu 'alallah", english: "I place my trust in God", source: "Sunan Abu Dawud" },
-  { arabic: "رَضِيتُ بِاللهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا", transliteration: "Raditu billahi rabban wa bil-islami dinan wa bi-Muhammadin nabiyyan", english: "I am pleased with God as my Lord, Islam as my religion, Muhammad as my Prophet", source: "Sunan al-Tirmidhi" },
-  { arabic: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", transliteration: "La ilaha illallah wahdahu la sharika lah, lahul-mulku wa lahul-hamd, wa huwa 'ala kulli shay'in qadir", english: "There is no god but God alone — to Him all dominion, all praise, and He is over all things capable", source: "Sahih al-Bukhari" },
-  { arabic: "اللَّهُمَّ أَصْلِحْ لِي دِينِي الَّذِي هُوَ عِصْمَةُ أَمْرِي", transliteration: "Allahumma aslih li dini alladhi huwa 'ismatu amri", english: "O God, set right for me my religion which is the safeguard of my affairs", source: "Sahih Muslim" },
-  { arabic: "اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي", transliteration: "Allahummah-dini wa saddidni", english: "O God, guide me and keep me on the right course", source: "Sahih Muslim" }
+  { arabic:"سُبْحَانَ اللهِ", transliteration:"Subhan Allah", english:"Glory be to God", source:"Sahih al-Bukhari" },
+  { arabic:"الْحَمْدُ لِلَّهِ", transliteration:"Alhamdulillah", english:"All praise is due to God", source:"Quran 1:2" },
+  { arabic:"اللهُ أَكْبَرُ", transliteration:"Allahu Akbar", english:"God is the Greatest", source:"Sahih al-Bukhari" },
+  { arabic:"لَا إِلَهَ إِلَّا اللهُ", transliteration:"La ilaha illallah", english:"There is no god but God", source:"Sahih Muslim" },
+  { arabic:"أَسْتَغْفِرُ اللهَ", transliteration:"Astaghfirullah", english:"I seek forgiveness from God", source:"Sahih al-Bukhari" },
+  { arabic:"بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ", transliteration:"Bismillah ir-Rahman ir-Rahim", english:"In the name of God, the Most Gracious, the Most Merciful", source:"Quran 1:1" },
+  { arabic:"لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ", transliteration:"La hawla wa la quwwata illa billah", english:"There is no power nor strength except through God", source:"Sahih al-Bukhari" },
+  { arabic:"سُبْحَانَ اللهِ وَبِحَمْدِهِ", transliteration:"Subhan Allahi wa bihamdihi", english:"Glory be to God and all praise is due to Him", source:"Sahih Muslim" },
+  { arabic:"سُبْحَانَ اللهِ الْعَظِيمِ", transliteration:"Subhan Allahil Azim", english:"Glory be to God, the Most Great", source:"Sahih al-Bukhari" },
+  { arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ", transliteration:"Allahumma salli 'ala Muhammad", english:"O God, send blessings upon Muhammad", source:"Sahih Muslim" },
+  { arabic:"رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ", transliteration:"Rabbi-ghfir li wa tub 'alayy", english:"My Lord, forgive me and accept my repentance", source:"Sunan Abu Dawud" },
+  { arabic:"اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ", transliteration:"Allahumma a'inni 'ala dhikrika wa shukrika wa husni 'ibadatik", english:"O God, help me in remembering You, in thanking You, and in worshipping You in the best manner", source:"Sunan Abu Dawud" },
+  { arabic:"حَسْبِيَ اللهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ", transliteration:"Hasbiyallahu la ilaha illa huwa 'alayhi tawakkaltu", english:"God is sufficient for me; there is no god but Him. Upon Him I rely", source:"Quran 9:129" },
+  { arabic:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ", transliteration:"Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhaban-nar", english:"Our Lord, grant us good in this life and in the hereafter, and protect us from the Fire", source:"Quran 2:201" },
+  { arabic:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ", transliteration:"Allahumma inni a'udhu bika minal-hammi wal-hazani", english:"O God, I seek refuge in You from worry and grief", source:"Sahih al-Bukhari" },
+  { arabic:"يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ", transliteration:"Ya Hayyu Ya Qayyum, birahmatika astaghith", english:"O Ever-Living, O Sustainer of all, by Your mercy I call for help", source:"Sunan al-Tirmidhi" },
+  { arabic:"اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا", transliteration:"Allahumma barik lana fima razaqtana", english:"O God, bless us in what You have provided us", source:"Sunan Abu Dawud" },
+  { arabic:"رَبِّ زِدْنِي عِلْمًا", transliteration:"Rabbi zidni 'ilma", english:"My Lord, increase me in knowledge", source:"Quran 20:114" },
+  { arabic:"اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ", transliteration:"Allahumma anta-ssalam wa minkas-salam", english:"O God, You are Peace and from You comes peace", source:"Sahih Muslim" },
+  { arabic:"إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ", transliteration:"Inna lillahi wa inna ilayhi raji'un", english:"Indeed we belong to God, and indeed to Him we shall return", source:"Quran 2:156" },
+  { arabic:"اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ", transliteration:"Allahumma inni as'alukal-jannata wa a'udhu bika minan-nar", english:"O God, I ask You for Paradise and seek refuge in You from the Fire", source:"Sunan Abu Dawud" },
+  { arabic:"سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ", transliteration:"Subhanakallahumma wa bihamdika, ash-hadu alla ilaha illa ant", english:"Glory be to You O God, and all praise. I bear witness there is no god but You", source:"Sunan al-Tirmidhi" },
+  { arabic:"اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ", transliteration:"Allahumma-kfini bihalaalika 'an haraamik", english:"O God, make what is lawful sufficient for me so I need not what is unlawful", source:"Sunan al-Tirmidhi" },
+  { arabic:"أَعُوذُ بِاللهِ مِنَ الشَّيْطَانِ الرَّجِيمِ", transliteration:"A'udhu billahi minash-shaytanir-rajim", english:"I seek refuge in God from the accursed Satan", source:"Quran 16:98" },
+  { arabic:"اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي", transliteration:"Allahumma innaka 'afuwwun tuhibbul 'afwa fa'fu 'anni", english:"O God, You are Forgiving and love forgiveness, so forgive me", source:"Sunan Ibn Majah" },
+  { arabic:"رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا", transliteration:"Rabbana la tu'akhidhna in nasina aw akhta'na", english:"Our Lord, do not take us to task if we forget or make a mistake", source:"Quran 2:286" },
+  { arabic:"تَوَكَّلْتُ عَلَى اللهِ", transliteration:"Tawakkaltu 'alallah", english:"I place my trust in God", source:"Sunan Abu Dawud" },
+  { arabic:"رَضِيتُ بِاللهِ رَبًّا وَبِالْإِسْلَامِ دِينًا وَبِمُحَمَّدٍ نَبِيًّا", transliteration:"Raditu billahi rabban wa bil-islami dinan wa bi-Muhammadin nabiyyan", english:"I am pleased with God as my Lord, Islam as my religion, Muhammad as my Prophet", source:"Sunan al-Tirmidhi" },
+  { arabic:"لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", transliteration:"La ilaha illallah wahdahu la sharika lah, lahul-mulku wa lahul-hamd, wa huwa 'ala kulli shay'in qadir", english:"There is no god but God alone — to Him all dominion, all praise, and He is over all things capable", source:"Sahih al-Bukhari" },
+  { arabic:"اللَّهُمَّ أَصْلِحْ لِي دِينِي الَّذِي هُوَ عِصْمَةُ أَمْرِي", transliteration:"Allahumma aslih li dini alladhi huwa 'ismatu amri", english:"O God, set right for me my religion which is the safeguard of my affairs", source:"Sahih Muslim" },
+  { arabic:"اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي", transliteration:"Allahummah-dini wa saddidni", english:"O God, guide me and keep me on the right course", source:"Sahih Muslim" }
 ];
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// THREE.JS — HD DYNAMIC ORBIT JOURNEY
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
+/* ── NEBULA: pure 2D canvas ── */
+const nCanvas = document.getElementById('nebula-canvas');
+const nCtx = nCanvas.getContext('2d');
+const sCanvas = document.getElementById('star-canvas');
+const sCtx = sCanvas.getContext('2d');
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 2000);
-// Starting position
-camera.position.set(0, 0, 5); 
-
-// --- HD NEBULA SHADER (Math-based, non-pixelated) ---
-const nebulaShader = {
-    uniforms: {
-        uTime: { value: 0 },
-        uRes: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-    },
-    vertexShader: `
-        varying vec2 vUv;
-        void main() { vUv = uv; gl_Position = vec4(position, 1.0); }
-    `,
-    fragmentShader: `
-        precision highp float;
-        uniform float uTime;
-        uniform vec2 uRes;
-        varying vec2 vUv;
-
-        float hash(vec2 p) {
-            p = fract(p * vec2(123.34, 456.21));
-            p += dot(p, p + 45.32);
-            return fract(p.x * p.y);
-        }
-
-        float noise(vec2 p) {
-            vec2 i = floor(p); vec2 f = fract(p);
-            f = f * f * (3.0 - 2.0 * f);
-            return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-                       mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
-        }
-
-        float fbm(vec2 p) {
-            float v = 0.0; float a = 0.5;
-            for (int i = 0; i < 7; i++) {
-                v += a * noise(p); p *= 2.1; a *= 0.5;
-            }
-            return v;
-        }
-
-        void main() {
-            vec2 uv = (vUv - 0.5) * (uRes / min(uRes.x, uRes.y));
-            float t = uTime * 0.04;
-            
-            // Camera Zoom/Travel Simulation
-            uv *= 0.8 - sin(t * 0.1) * 0.2;
-            
-            // Layered Colors (James Webb Cliffs palette)
-            vec2 nUv = uv + vec2(t * 0.5, t * 0.2);
-            float n1 = fbm(uv * 1.5 + fbm(nUv));
-            float n2 = fbm(uv * 2.0 - t * 0.1);
-
-            vec3 teal = vec3(0.0, 0.4, 0.4);
-            vec3 orange = vec3(0.8, 0.4, 0.1);
-            vec3 purple = vec3(0.3, 0.1, 0.5);
-
-            vec3 color = mix(teal, purple, n1);
-            color = mix(color, orange, n2 * 0.6);
-            
-            // Depth/Darkness
-            float mask = smoothstep(1.2, 0.2, length(uv));
-            color *= n1 * mask;
-            
-            // HD Stars baked into shader
-            float stars = pow(hash(vUv), 500.0) * 1.5;
-            color += stars;
-
-            gl_FragColor = vec4(color, 1.0);
-        }
-    `
-};
-
-const nebulaMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial(nebulaShader));
-scene.add(nebulaMesh);
-
-// --- FLYING STAR SYSTEM ---
-const starCount = 3000;
-const starGeo = new THREE.BufferGeometry();
-const starPos = new Float32Array(starCount * 3);
-for (let i = 0; i < starCount; i++) {
-    starPos[i*3] = (Math.random() - 0.5) * 1500;
-    starPos[i*3+1] = (Math.random() - 0.5) * 1500;
-    starPos[i*3+2] = (Math.random() - 0.5) * 2000;
+function resizeAll() {
+  nCanvas.width  = window.innerWidth;
+  nCanvas.height = window.innerHeight;
+  sCanvas.width  = window.innerWidth;
+  sCanvas.height = window.innerHeight;
 }
-starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-const starMat = new THREE.PointsMaterial({ size: 1.8, color: 0xffffff, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
-const stars = new THREE.Points(starGeo, starMat);
-scene.add(stars);
+resizeAll();
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// AZKAR LOGIC
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function hash(x, y) {
+  let n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
+  return n - Math.floor(n);
+}
+function smoothNoise(x, y) {
+  const ix = Math.floor(x), iy = Math.floor(y);
+  const fx = x - ix, fy = y - iy;
+  const ux = fx*fx*(3-2*fx), uy = fy*fy*(3-2*fy);
+  return hash(ix,iy)*(1-ux)*(1-uy) +
+         hash(ix+1,iy)*ux*(1-uy) +
+         hash(ix,iy+1)*(1-ux)*uy +
+         hash(ix+1,iy+1)*ux*uy;
+}
+function fbm(x, y, oct=6) {
+  let v=0, a=0.5;
+  for(let i=0;i<oct;i++){ v+=a*smoothNoise(x,y); x*=2.1; y*=2.1; a*=0.5; }
+  return v;
+}
+
+const SCALE = 4;
+function drawNebula(t) {
+  const w = nCanvas.width, h = nCanvas.height;
+  const sw = Math.ceil(w/SCALE), sh = Math.ceil(h/SCALE);
+  const img = nCtx.createImageData(sw, sh);
+  const d = img.data;
+  const cx = sw/2, cy = sh/2, maxR = Math.max(cx,cy);
+  for(let py=0;py<sh;py++){
+    for(let px=0;px<sw;px++){
+      const ux = (px - cx) / maxR;
+      const uy = (py - cy) / maxR;
+      const len = Math.sqrt(ux*ux+uy*uy);
+      const mask = Math.max(0, 1 - len*0.9);
+      const sx = ux * 1.4 + t*0.05;
+      const sy = uy * 1.4 + t*0.03;
+      const n1 = fbm(sx + fbm(sx+t*0.04, sy, 4), sy, 5);
+      const n2 = fbm(sx*1.5 - t*0.02, sy*1.5, 4);
+      const r = Math.floor(n2 * 200 * mask * mask);
+      const g = Math.floor(n1 * 110 * mask);
+      const b = Math.floor((n1*0.6 + n2*0.3) * 230 * mask);
+      const idx = (py*sw+px)*4;
+      d[idx]=r; d[idx+1]=g; d[idx+2]=b; d[idx+3]=255;
+    }
+  }
+  const offscreen = document.createElement('canvas');
+  offscreen.width = sw; offscreen.height = sh;
+  offscreen.getContext('2d').putImageData(img, 0, 0);
+  nCtx.clearRect(0,0,w,h);
+  nCtx.drawImage(offscreen, 0, 0, w, h);
+}
+
+/* ── STARS: warp fly-through ── */
+const STAR_COUNT = 700;
+const stars = [];
+function makeStars() {
+  stars.length = 0;
+  const w = sCanvas.width, h = sCanvas.height;
+  for(let i=0;i<STAR_COUNT;i++){
+    stars.push({ x:(Math.random()-0.5)*w*2, y:(Math.random()-0.5)*h*2, z:Math.random()*w, pz:0 });
+  }
+}
+makeStars();
+
+function drawStars() {
+  const w = sCanvas.width, h = sCanvas.height;
+  const cx = w/2, cy = h/2;
+  sCtx.clearRect(0,0,w,h);
+  for(const s of stars) {
+    const sx = (s.x / s.z) * w + cx;
+    const sy = (s.y / s.z) * h + cy;
+    const px = (s.x / s.pz) * w + cx;
+    const py = (s.y / s.pz) * h + cy;
+    const size = Math.max(0.3, (1 - s.z/w) * 2.8);
+    const bright = Math.min(1, (1 - s.z/w) * 1.5);
+    sCtx.beginPath();
+    sCtx.moveTo(px, py);
+    sCtx.lineTo(sx, sy);
+    sCtx.strokeStyle = `rgba(255,255,255,${bright.toFixed(2)})`;
+    sCtx.lineWidth = size;
+    sCtx.stroke();
+  }
+}
+
+function updateStars(speed) {
+  const w = sCanvas.width;
+  for(const s of stars) {
+    s.pz = s.z;
+    s.z -= speed;
+    if(s.z <= 0) {
+      s.x = (Math.random()-0.5) * w * 2;
+      s.y = (Math.random()-0.5) * sCanvas.height * 2;
+      s.z = w;
+      s.pz = w;
+    }
+  }
+}
+
+/* ── AZKAR LOGIC ── */
 const DURATION = 15000;
-let queue = [], currentIdx = 0, startTime = null, paused = false, pausedAt = 0, currentEl = null;
+let queue=[], currentIdx=0, startTime=null, paused=false, pausedAt=0, currentEl=null;
 
-function buildQueue() { queue = [...Array(AZKAR.length).keys()].sort(() => Math.random() - 0.5); }
+function buildQueue() { queue=[...Array(AZKAR.length).keys()].sort(()=>Math.random()-0.5); }
 
 function showAzkar(idx) {
-    const z = AZKAR[queue[idx]];
-    const old = currentEl;
-    if (old) { 
-        old.classList.remove('active'); 
-        old.classList.add('exit'); 
-        setTimeout(() => old.remove(), 800); 
-    }
-    const el = document.createElement('div');
-    el.className = 'azkar-slide';
-    el.innerHTML = `<div class="arabic">${z.arabic}</div><div class="divider"></div><div class="transliteration">${z.transliteration}</div><div class="english">${z.english}</div><div class="source">${z.source}</div>`;
-    document.getElementById('text-wrap').appendChild(el);
-    setTimeout(() => el.classList.add('active'), 50);
-    currentEl = el;
-    document.getElementById('counter').textContent = `${idx + 1} / ${queue.length}`;
+  const z = AZKAR[queue[idx]];
+  const old = currentEl;
+  if(old){ old.classList.remove('active'); old.classList.add('exit'); setTimeout(()=>old.remove(),800); }
+  const el = document.createElement('div');
+  el.className='azkar-slide';
+  el.innerHTML=`<div class="arabic">${z.arabic}</div><div class="transliteration">${z.transliteration}</div><div class="english">${z.english}</div><div class="source">${z.source}</div>`;
+  document.getElementById('text-wrap').appendChild(el);
+  setTimeout(()=>el.classList.add('active'),50);
+  currentEl=el;
+  document.getElementById('counter').textContent=`${idx+1} / ${queue.length}`;
 }
 
-function advance() { currentIdx = (currentIdx + 1) % queue.length; if(currentIdx === 0) buildQueue(); startTime = performance.now(); showAzkar(currentIdx); }
+function advance() { currentIdx=(currentIdx+1)%queue.length; if(currentIdx===0)buildQueue(); startTime=performance.now(); showAzkar(currentIdx); }
 
 function setPaused(val) {
-    paused = val;
-    document.getElementById('paused-pill').style.opacity = paused ? '1' : '0';
-    document.getElementById('icon-pause').style.display = paused ? 'none' : 'block';
-    document.getElementById('icon-play').style.display = paused ? 'block' : 'none';
-    if(paused) pausedAt = performance.now() - startTime; else startTime = performance.now() - pausedAt;
+  paused=val;
+  document.getElementById('paused-pill').style.opacity=paused?'1':'0';
+  document.getElementById('icon-pause').style.display=paused?'none':'block';
+  document.getElementById('icon-play').style.display=paused?'block':'none';
+  if(paused) pausedAt=performance.now()-startTime;
+  else startTime=performance.now()-pausedAt;
 }
 
-document.getElementById('card').addEventListener('click', () => { if(!paused) advance(); });
-document.getElementById('pause-btn').addEventListener('click', e => { e.stopPropagation(); setPaused(!paused); });
-document.addEventListener('keydown', e => { if(e.code === 'Space') advance(); if(e.code === 'KeyP') setPaused(!paused); });
+document.getElementById('card').addEventListener('click',()=>{ if(!paused)advance(); });
+document.getElementById('pause-btn').addEventListener('click',e=>{ e.stopPropagation(); setPaused(!paused); });
+document.addEventListener('keydown',e=>{ if(e.code==='Space')advance(); if(e.code==='KeyP')setPaused(!paused); });
 
 buildQueue();
 startTime = performance.now();
 showAzkar(0);
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ANIMATION LOOP
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ── ANIMATION LOOP ── */
+let lastNebulaUpdate = 0;
+
 function animate(now) {
-    requestAnimationFrame(animate);
-    const t = now * 0.001;
-    nebulaShader.uniforms.uTime.value = t;
+  requestAnimationFrame(animate);
+  const t = now * 0.001;
 
-    // 1. STAR FLY-THROUGH (Forward movement)
-    const pos = stars.geometry.attributes.position.array;
-    for (let i = 0; i < starCount; i++) {
-        pos[i*3 + 2] += 1.5;
-        if (pos[i*3 + 2] > 500) pos[i*3 + 2] = -1500;
-    }
-    stars.geometry.attributes.position.needsUpdate = true;
+  if(now - lastNebulaUpdate > 80) {
+    drawNebula(t);
+    lastNebulaUpdate = now;
+  }
 
-    // 2. DYNAMIC CAMERA MOVEMENT (Fly-through + Orbit)
-    if (!paused) {
-        // Slow orbit (yaw) around the central axis
-        stars.rotation.y = Math.sin(t * 0.05) * 0.1;
-        stars.rotation.x = Math.cos(t * 0.03) * 0.05;
+  const speed = paused ? 1.5 : 4 + Math.sin(t * 0.3) * 1.5;
+  updateStars(speed);
+  drawStars();
 
-        // Dynamic forward speed modulation (slow Majestic drift)
-        // Adjusting camera Z for "flying through" feeling
-        camera.position.z = 5 + Math.sin(t * 0.1) * 2;
-        
-        // Parallax drift based on movement
-        camera.position.x = Math.sin(t * 0.12) * 8;
-        camera.position.y = Math.cos(t * 0.1) * 4;
-        
-        // Fixed lookAt creates the orbit feeling
-        camera.lookAt(0, 0, -1200); 
-
-        // Progress bar
-        const p = Math.min((performance.now() - startTime) / DURATION, 1);
-        document.getElementById('progress-bar').style.transform = `scaleX(${1 - p})`;
-        if (p >= 1) advance();
-    }
-    renderer.render(scene, camera);
+  if(!paused) {
+    const p = Math.min((performance.now()-startTime)/DURATION, 1);
+    document.getElementById('progress-bar').style.transform=`scaleX(${1-p})`;
+    if(p>=1) advance();
+  }
 }
 
-window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    nebulaShader.uniforms.uRes.value.set(window.innerWidth, window.innerHeight);
-});
-
+window.addEventListener('resize',()=>{ resizeAll(); makeStars(); });
 animate(0);
 </script>
 </body>
